@@ -134,12 +134,13 @@ def bftIter(g):
     return visitedArr
 
 
-def bftRecLinkedList(g):
-    bftRecursive(g)
+def bftRecLinkedList(n):
+    linkedList = createLinkedList(n)
+    return bftIter(linkedList)
 
-def bftIterLinkedList(g):
-    bftIter(g)
-
+def bftIterLinkedList(n):
+    linkedList = createLinkedList(n)
+    return bftRecursive(linkedList)
 #testing
 
 print("adding nodes")
@@ -184,5 +185,13 @@ print(randomGraph.edges)
 
 print(mainGraph.edges)
 print(dfsIter(1, 99, mainGraph))
+
+#they are the same thing
 print(bftIter(mainGraph))
 print(bftRecursive(mainGraph))
+
+linListIter = bftIterLinkedList(100)
+print(linListIter)
+
+linListIter = bftRecLinkedList(10000)
+print(linListIter)
