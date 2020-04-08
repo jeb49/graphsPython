@@ -190,8 +190,10 @@ print(dfsIter(1, 99, mainGraph))
 print(bftIter(mainGraph))
 print(bftRecursive(mainGraph))
 
-linListIter = bftIterLinkedList(100)
+"""
+linListIter = bftIterLinkedList(10000)
 print(linListIter)
 
 linListIter = bftRecLinkedList(10000)
 print(linListIter)
+"""
