@@ -10,7 +10,8 @@ class WeightedGraph:
     def addUndirectedEdge(self, nodeOne, nodeTwo, weight):
         if nodeTwo not in self.edges[nodeOne].keys:
             self.edges[nodeOne][nodeTwo] = weight
-
+        if nodeOne not in self.edges[nodeTwo].keys:
+            self.edges[nodeTwo][nodeOne] = weight
 
     def removeUndirectedEdge(self, nodeOne, nodeTwo):
         if nodeTwo in self.edges[nodeOne]:
@@ -20,7 +21,6 @@ class WeightedGraph:
         return self.nodes
 
 def dijkstra(graph, start):
-    print("i dont know what im doing")
     """
     distances = {}
     priority = []

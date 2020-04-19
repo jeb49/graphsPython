@@ -22,38 +22,36 @@ class DirectedGraph:
 def khans(g):
     inDegreeMap = {}
 
-    for vert in g.edges:
-        for neigh in g.edges[vert]:
-            if neigh not in inDegreeMap.keys():
-                inDegreeMap[neigh] = 1
+    for vertex in g.edges:
+        for neighbor in g.edges[vertex]:
+            if neighbor not in inDegreeMap.keys():
+                inDegreeMap[neighbor] = 1
             else:
-                inDegreeMap[neigh] += 1
+                inDegreeMap[neighbor] += 1
 
     arr = []
     q =[]
 
-    for el in inDegreeMap:
-        q.append(el)
+    for edge in inDegreeMap:
+        q.append(edge)
+
     while len(q) != 0:
         curr = q[0]
+        q.pop(0)
         arr.append(curr)
 
         #decrement the in-degrees of all dependents of curr
-        for el in g.edges[curr]:
-            inDegreeMap[el] -= 1
+        for edge in g.edges[curr]:
+            inDegreeMap[edge] -= 1
 
         #decrement the in-degree of curr to -1 (to avoid adding it back to Q)
         inDegreeMap[curr] = -1
 
-        for neigh in g.edges[curr]:
-            if inDegreeMap[neigh] == 0:
-                q.append(neigh)
-        q.pop(0)
+        for neighbor in g.edges[curr]:
+            if inDegreeMap[neighbor] == 0:
+                q.append(neighbor)
 
-    #output all nodes in q order
     return arr
-
-
 
 def mDFS(g):
     stack = []
