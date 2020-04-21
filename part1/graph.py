@@ -1,15 +1,13 @@
 import random
-from collections import deque
 class Graph:
     def __init__(self):
         self.nodes = set()
         self.edges = {}
     
     def addNode(self, nodeToAdd):
-        #node can theoretically be anything
-        if nodeToAdd not in self.nodes:
-            self.nodes.add(nodeToAdd)
-            self.edges[nodeToAdd] = set()
+        #node can theoretically be anything, thats why i dont check if its a node
+        self.nodes.add(nodeToAdd)
+        self.edges[nodeToAdd] = set()
 
     def addUndirectedEdge(self, nodeOne, nodeTwo):
         self.edges[nodeOne].add(nodeTwo)
@@ -63,6 +61,10 @@ class Traversal:
 
         return randomGraph
 
+    """
+        Depth first traversal iterativly
+    """
+
     def dfsIter(self, start, end, graph):
         s = []
         visitedArr = []
@@ -82,7 +84,9 @@ class Traversal:
 
         return visitedArr
 
-
+    """
+        Breadth first traversal recursiivly
+    """
     def bftHelperRec(self, g, q, visted):
         if len(q) == 0:
             return visted
@@ -106,8 +110,9 @@ class Traversal:
                 self.bftHelperRec(g, q, visted)
         return visted 
 
-
-
+    """
+        Breadth first traversal iterativly
+    """
     def bftIter(self, g):
         q = []
         visitedArr = []
@@ -125,10 +130,15 @@ class Traversal:
         return visitedArr
 
 
+    """
+        Breadth first traversal recurtisivly a graph with n elements
+    """
     def bftRecLinkedList(self, n):
         linkedList = self.createLinkedList(n)
         return self.bftIter(linkedList)
-
+    """
+        Breadth first traversal iterativly a graph with n elements
+    """
     def bftIterLinkedList(self, n):
         linkedList = self.createLinkedList(n)
         return self.bftRecursive(linkedList)
