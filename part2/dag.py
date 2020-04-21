@@ -5,12 +5,10 @@ class DirectedGraph:
     
     def addNode(self, nodeToAdd):
         self.nodes.add(nodeToAdd)
-        self.edges[nodeToAdd] = []
+        self.edges[nodeToAdd] = set()
 
     def addUndirectedEdge(self, nodeOne, nodeTwo):
-        if nodeTwo not in self.edges[nodeOne]:
-            self.edges[nodeOne].append(nodeTwo)
-
+        self.edges[nodeOne].add(nodeTwo)
 
     def removeUndirectedEdge(self, nodeOne, nodeTwo):
         if nodeTwo in self.edges[nodeOne]:
@@ -19,6 +17,9 @@ class DirectedGraph:
     def getAllNodes(self):
         return self.nodes
 
+"""
+    khans algorithim
+"""
 def khans(g):
     inDegreeMap = {}
 
@@ -53,6 +54,17 @@ def khans(g):
 
     return arr
 
+"""
+    modified dfs algorithim
+"""
+
+def mDFSHelper(graph, vert, vistedArr, stack):
+    vistedArr.append(vert)
+    for neigh in graph.edges[vert]:
+        if neigh not in vistedArr:
+            mDFSHelper(graph, neigh, vistedArr, stack)
+    stack.append(vert)
+
 def mDFS(g):
     stack = []
     vistedArr = []
@@ -63,9 +75,4 @@ def mDFS(g):
     return vistedArr
 
     
-def mDFSHelper(graph, vert, vistedArr, stack):
-    vistedArr.append(vert)
-    for neigh in graph.edges[vert]:
-        if neigh not in vistedArr:
-            mDFSHelper(graph, neigh, vistedArr, stack)
-    stack.append(vert)
+

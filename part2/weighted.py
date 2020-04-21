@@ -16,27 +16,28 @@ class WeightedGraph:
     def removeUndirectedEdge(self, nodeOne, nodeTwo):
         if nodeTwo in self.edges[nodeOne]:
             self.edges[nodeOne].remove(nodeTwo)
+        if nodeOne in self.edges[nodeTwo]:
+            self.edges[nodeTwo].remove(nodeOne)
 
     def getAllNodes(self):
         return self.nodes
 
-def dijkstra(graph, start):
-    """
-    distances = {}
-    priority = []
-    prev = p[]
-    vistedArr = []
-    for vertex in g:
-        distance[vertex] = 0 #trying to simulate infinity
-        prev[vertex] = None
-        if vertex != start:
-            priority[vertex] = graph.edges[vertex]
-            distance[start] = 0
-    
-    while len(priority) != 0:
-        currMin = priority.pop(min(priority))
-        for neigh in graph.edges[currMin]:
-            tempDist = distance[currMin] + graph.edges[currMin][neigh]
-            distance[neigh] = temp
-            prev[neigh] = currMin
-    """
+    def dijkstra(self, graph, start):
+        distances = {}
+        priority = []
+        prev = []
+        vistedArr = []
+
+        for neighbor in g.edges[start]:
+            distance[neighbor] = 0 #trying to simulate infinity
+            prev[neighbor] = None
+            if neighbor != start:
+                priority[neighbor] = graph.edges[neighbor]
+                distance[neighbor] = 0
+        
+        while len(priority) != 0:
+            currMin = priority.pop(min(priority))
+            for neigh in graph.edges[currMin]:
+                tempDist = distances[currMin] + graph.edges[currMin][neigh]
+                distance[neigh] = tempDist
+                prev[neigh] = currMin

@@ -39,11 +39,16 @@ class GridGraph:
     
     def getAllNodes(self):
         return self.nodes
-
+        
+"""
+    returns the matthaten distance between two nodes
+"""
 def matthattenDistance(nodeOne, nodeTwo):
     return abs(nodeOne.x - nodeTwo.x) + abs(nodeOne.y - nodeTwo.y)
 
-
+"""
+    calculates the heuristic of the graph given a node
+"""
 def calcHeuristic(gridGraph, start):
     heuristicSet = {}
     for gridNode in gridGraph.nodes:
@@ -53,24 +58,16 @@ def calcHeuristic(gridGraph, start):
     return heuristicSet
 
 
-#innefficient
-
-
 def astar(gridGraph, src, dest):
-    print("a star")
     approxDist = calcHeuristic(gridGraph, src)
     actualDistances = {}
     astar = {}
 
-    for node in gridGraph.getAllNodes():
-        actualDistances[node] = None #problematic i know
-
-    originNode = GridNode("origin", 0, 0)
+    originNode = GridNode("origin", 0, 0) 
     finalized = []
     aproxOrginDist = matthattenDistance(originNode, src)
 
     curr = originNode #not sure about this
-
     gPlusH = {}
 
     while curr != dest:
@@ -84,12 +81,10 @@ def astar(gridGraph, src, dest):
                     actualDistances[neighbor] = approxDist[curr] + actualDistances[neighbor]
                 approxDist[neighbor] = matthattenDistance(curr, neighbor)
 
-            #TODO: set curr to the next min node g[curr] + h[node] not yet finalized
-
         for node in gridGraph.getAllNodes():
             if node in gPlusH and node in finalized:
                 del gPlusH[node]
-            else:
+            elif node in actualDistances and node in approxDist:
                 gPlusH[node] = actualDistances[node] + approxDist[node]
         
         curr = min(gPlusH)
