@@ -18,8 +18,7 @@ class GridGraph:
     def __init__(self):
         self.nodes = set()
     
-    def addGridNode(self, val, x, y):
-        nodeToAdd = GridNode(val, x, y)
+    def addGridNode(self, nodeToAdd):
         self.nodes.add(nodeToAdd)
     
     def addUndirectedEdge(self, first, second):
@@ -39,7 +38,7 @@ class GridGraph:
     
     def getAllNodes(self):
         return self.nodes
-        
+
 """
     returns the matthaten distance between two nodes
 """
@@ -51,9 +50,10 @@ def matthattenDistance(nodeOne, nodeTwo):
 """
 def calcHeuristic(gridGraph, start):
     heuristicSet = {}
+
     for gridNode in gridGraph.nodes:
         aproximateDist = matthattenDistance(start, gridNode)
-        heuristicSet[gridNode.val] = aproximateDist
+        heuristicSet[gridNode] = aproximateDist
 
     return heuristicSet
 
@@ -62,31 +62,60 @@ def astar(gridGraph, src, dest):
     approxDist = calcHeuristic(gridGraph, src)
     actualDistances = {}
     astar = {}
-
-    originNode = GridNode("origin", 0, 0) 
-    finalized = []
-    aproxOrginDist = matthattenDistance(originNode, src)
-
-    curr = originNode #not sure about this
     gPlusH = {}
+    finalized = []
 
-    while curr != dest:
+    curr = src
+    actualDistances[curr] = 0
+    
+    while curr != dest or curr != None:
         finalized.append(curr)
 
-        for neighbor in curr:
+        for neighbor in curr.neighbors:
             #update distances
-            if neighbor not in curr:
-                #TODO: fix this
+            if neighbor not in finalized:
                 if approxDist[neighbor] < actualDistances[curr]: 
                     actualDistances[neighbor] = approxDist[curr] + actualDistances[neighbor]
-                approxDist[neighbor] = matthattenDistance(curr, neighbor)
+                actualDistances[neighbor] = matthattenDistance(curr, neighbor)
 
-        for node in gridGraph.getAllNodes():
-            if node in gPlusH and node in finalized:
-                del gPlusH[node]
+        curr = None
+        for node in approxDist:
+            if node in finalized:
+                continue
             elif node in actualDistances and node in approxDist:
                 gPlusH[node] = actualDistances[node] + approxDist[node]
-        
+
+        print(actualDistances)
+        print(approxDist)
+        print(gPlusH)
         curr = min(gPlusH)
     
     return actualDistances[dest]
+
+mainGraph = GridGraph()
+
+nodeOne = GridNode(1, 0, 0)
+nodeTwo = GridNode(2, 0, 1)
+nodeThree = GridNode(3, 1, 1)
+nodeFour = GridNode(4, 1, 0)
+nodeFive = GridNode(5, 1, 2)
+nodeSix = GridNode(6, 2, 1)
+nodeSeven = GridNode(7, 1, 3)
+nodeEight = GridNode(8, 2, 2)
+
+mainGraph.addGridNode(nodeOne)
+mainGraph.addGridNode(nodeTwo)
+mainGraph.addGridNode(nodeThree)
+mainGraph.addGridNode(nodeFour)
+mainGraph.addGridNode(nodeFive)
+mainGraph.addGridNode(nodeSix)
+mainGraph.addGridNode(nodeSeven)
+mainGraph.addGridNode(nodeEight)
+
+mainGraph.addUndirectedEdge(nodeOne, nodeFour)
+mainGraph.addUndirectedEdge(nodeOne, nodeTwo)
+mainGraph.addUndirectedEdge(nodeSix, nodeEight)
+mainGraph.addUndirectedEdge(nodeThree, nodeTwo)
+mainGraph.addUndirectedEdge(nodeFive, nodeSix)
+
+astar(mainGraph, nodeOne, nodeThree)

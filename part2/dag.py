@@ -7,10 +7,10 @@ class DirectedGraph:
         self.nodes.add(nodeToAdd)
         self.edges[nodeToAdd] = set()
 
-    def addUndirectedEdge(self, nodeOne, nodeTwo):
+    def addDirectedEdge(self, nodeOne, nodeTwo):
         self.edges[nodeOne].add(nodeTwo)
 
-    def removeUndirectedEdge(self, nodeOne, nodeTwo):
+    def removeDirectedEdge(self, nodeOne, nodeTwo):
         if nodeTwo in self.edges[nodeOne]:
             self.edges[nodeOne].remove(nodeTwo)
 
@@ -22,19 +22,21 @@ class DirectedGraph:
 """
 def khans(g):
     inDegreeMap = {}
+    arr = []
+    q =[]
 
+    #add all elements of M whose values are 0 to Q
     for vertex in g.edges:
+        inDegreeMap[vertex] = 0
         for neighbor in g.edges[vertex]:
             if neighbor not in inDegreeMap.keys():
                 inDegreeMap[neighbor] = 1
             else:
                 inDegreeMap[neighbor] += 1
 
-    arr = []
-    q =[]
-
-    for edge in inDegreeMap:
-        q.append(edge)
+    for node in g.nodes:
+        if inDegreeMap[node] == 0:
+            q.append(node)
 
     while len(q) != 0:
         curr = q[0]
@@ -58,14 +60,14 @@ def khans(g):
     modified dfs algorithim
 """
 
-def mDFSHelper(graph, vert, vistedArr, stack):
+def mDFSHelper( graph, vert, vistedArr, stack):
     vistedArr.append(vert)
     for neigh in graph.edges[vert]:
         if neigh not in vistedArr:
             mDFSHelper(graph, neigh, vistedArr, stack)
     stack.append(vert)
 
-def mDFS(g):
+def mDFS( g):
     stack = []
     vistedArr = []
     for vertex in g.edges:
@@ -76,3 +78,28 @@ def mDFS(g):
 
     
 
+mainGraph = DirectedGraph()
+mainGraph.addNode(1)
+mainGraph.addNode(2)
+mainGraph.addNode(4)
+mainGraph.addNode(5)
+mainGraph.addNode(7)
+mainGraph.addNode(8)
+mainGraph.addNode(12)
+mainGraph.addNode(44)
+mainGraph.addNode(21)
+mainGraph.addNode(49)
+mainGraph.addNode(401)
+
+mainGraph.addDirectedEdge(1,2)
+print(mainGraph.getAllNodes())
+print(mainGraph.edges)
+mainGraph.removeDirectedEdge(1,2)
+print(mainGraph.edges)
+mainGraph.addDirectedEdge(1,7)
+mainGraph.addDirectedEdge(401,7)
+mainGraph.addDirectedEdge(1,8)
+print(mainGraph.edges)
+
+print(khans(mainGraph))
+print(mDFS(mainGraph))
