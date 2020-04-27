@@ -30,7 +30,7 @@ def createRandomGraphDagIter(n):
         randomGraph.addNode(randInt)
         chance = random.randint(0, 10)
 
-        if chance%2 == 0 and len(added) != 0:
+        if chance%2 == 0 and len(added) != 0:          
             indexToAdd = random.randint(0, len(added) - 1)
             randomGraph.addDirectedEdge(randInt, added[indexToAdd])
 

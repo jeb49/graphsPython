@@ -64,27 +64,41 @@ def matthattenDistance(nodeOne, nodeTwo):
 
 def createRandomGridGraph(n):
     randomGraph = GridGraph()
+    matrix = [[0] * n for i in range(n)] #yes this causes more space, but i dont know what else to do at this point lol
 
     for x in range(n):
         print("boop")
         for y in range(n):
             randomVal = 3000 * random.randint(0, n)
             gridNodeToAdd = GridNode(randomVal, x, y)
-            randomGraph.addGridNode(gridNodeToAdd)
+            matrix[x][y] = gridNodeToAdd
+            randomGraph.addGridNode(matrix[x][y])
+            
 
-    for node1 in randomGraph.nodes:
-        for node2 in randomGraph.nodes:
-            if node1 != node2:
-                chance = random.randint(0, 1000)
-                if len(node1.neighbors) < 4:
-                    if node1.neighborCheck(node2) and chance%2 == 0:
-                        print("hi")
-                        randomGraph.addUndirectedEdge(node1, node2)
-                else:
-                    break
-                    #     # print("added")
-                    # else:
-                    #     print("not added")
+    for node in randomGraph.nodes:
+        xR = node.x + 1
+        xL = node.x - 1
+        yU = node.y + 1
+        yD = node.y - 1
+
+        upChance = random.randint(0,10)
+        downChance = random.randint(0,10)
+        leftChance = random.randint(0, 10)
+        rightChance = random.randint(0, 10)
+
+        if yU < n:
+            if upChance % 2 == 0 and matrix[node.x][yU] not in node.neighbors:
+                randomGraph.addUndirectedEdge(node, matrix[node.x][yU])
+        if yD > 0:
+            if downChance % 2 == 0 and matrix[node.x][yD] not in node.neighbors:
+                randomGraph.addUndirectedEdge(node, matrix[node.x][yD])
+        if xL > 0:
+            if leftChance % 2 == 0 and matrix[xL][node.y] not in node.neighbors:
+                randomGraph.addUndirectedEdge(node, matrix[xL][node.y])
+        if xR < n:
+            if rightChance % 2 == 0 and matrix[xR][node.y] not in node.neighbors:
+                randomGraph.addUndirectedEdge(node, matrix[xR][node.y])
+
     return randomGraph
                     
 """
@@ -108,7 +122,7 @@ def astar(gridGraph, src, dest):
         for neighbor in curr.neighbors:
             if neighbor not in visted:
                 if neighbor not in distances or distances[neighbor] > distances[curr] + matthattenDistance(neighbor, dest):
-                    distances[neighbor] = distances[curr] + matthattenDistance(neighbor, dest)
+                    distances[neighbor] = distances[curr] + matthattenDistance(curr, neighbor) 
         
         curr = None
         maxNode = float('inf')
@@ -116,7 +130,7 @@ def astar(gridGraph, src, dest):
             if node not in visted or distances[node] < maxNode:
                 curr = node
                 maxNode = distances[curr]
-                print(node, node.neighbors, maxNode)
+                # print(node, node.neighbors, maxNode)
         
         # validPathCheck = 0
         # if curr != None:
@@ -163,26 +177,28 @@ mainGraph.addGridNode(nodeEight)
 
 mainGraph.addUndirectedEdge(nodeOne, nodeFour)
 mainGraph.addUndirectedEdge(nodeOne, nodeTwo)
-mainGraph.addUndirectedEdge(nodeSix, nodeEight)
 mainGraph.addUndirectedEdge(nodeThree, nodeTwo)
+mainGraph.addUndirectedEdge(nodeSix, nodeEight)
 mainGraph.addUndirectedEdge(nodeFive, nodeSix)
 
 rando = createRandomGridGraph(100)
 
 print(astar(mainGraph, nodeOne, nodeThree))
+# result i get {1: 0, 4: 1, 2: 1, 3: 1}, [1, 4, 2, 3]
+
 print(nodeOne.neighbors)
 
 # print(rando.nodes)
 
-# startAndEnd = rando.getFirstAndLast(0, 99)
+startAndEnd = rando.getFirstAndLast(0, 99)
 
 
-# print(startAndEnd[0].x, startAndEnd[0].y)
-# print(startAndEnd[1].x, startAndEnd[1].y) 
+print(startAndEnd[0].x, startAndEnd[0].y)
+print(startAndEnd[1].x, startAndEnd[1].y) 
 
 # first ended up being last and last ended up being first
 
-# print(astar(rando, startAndEnd[1], startAndEnd[0]))
+print(astar(rando, startAndEnd[1], startAndEnd[0]))
 
-for node in rando.nodes:
-    print(node, node.neighbors)
+# for node in rando.nodes:
+#     print(node, node.neighbors)
