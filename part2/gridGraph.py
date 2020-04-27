@@ -1,6 +1,8 @@
+import random
+
 class GridNode:
     def __init__(self, val, xCoor, yCoor):
-        self.val = val
+        self.val = val #node val can be theoretically be anything
         self.x = xCoor
         self.y = yCoor
         self.neighbors = set()
@@ -25,9 +27,9 @@ class GridGraph:
         nodeCheckFirst = first.neighborCheck(second)
         nodeCheckSecond = second.neighborCheck(first)
 
-        if nodeCheckFirst and len(first.neighbors) > 4:
+        if nodeCheckFirst and len(first.neighbors) < 4:
             first.neighbors.add(second)
-        if nodeCheckSecond and len(second.neighbors) > 4:
+        if nodeCheckSecond and len(second.neighbors) < 4:
             second.neighbors.add(first)
     
     def removeUndirectedEdge(self, first, second):
@@ -39,6 +41,17 @@ class GridGraph:
     def getAllNodes(self):
         return self.nodes
 
+    def getFirstAndLast(self, start, end):
+        returnArr = []
+        for node in self.nodes:
+            if node.x ==  start and node.y == start:
+                returnArr.append(node)
+            if node.x == end and node.y == end:
+                returnArr.append(node)
+
+        return returnArr
+
+
 """
     returns the matthaten distance between two nodes
 """
@@ -46,51 +59,87 @@ def matthattenDistance(nodeOne, nodeTwo):
     return abs(nodeOne.x - nodeTwo.x) + abs(nodeOne.y - nodeTwo.y)
 
 """
-    calculates the heuristic of the graph given a node
+    creates a random grid graph
 """
-def calcHeuristic(gridGraph, start):
-    heuristicSet = {}
 
-    for gridNode in gridGraph.nodes:
-        aproximateDist = matthattenDistance(start, gridNode)
-        heuristicSet[gridNode] = aproximateDist
+def createRandomGridGraph(n):
+    randomGraph = GridGraph()
 
-    return heuristicSet
+    for x in range(n):
+        print("boop")
+        for y in range(n):
+            randomVal = 3000 * random.randint(0, n)
+            gridNodeToAdd = GridNode(randomVal, x, y)
+            randomGraph.addGridNode(gridNodeToAdd)
 
+    for node1 in randomGraph.nodes:
+        for node2 in randomGraph.nodes:
+            if node1 != node2:
+                chance = random.randint(0, 1000)
+                if len(node1.neighbors) < 4:
+                    if node1.neighborCheck(node2) and chance%2 == 0:
+                        print("hi")
+                        randomGraph.addUndirectedEdge(node1, node2)
+                else:
+                    break
+                    #     # print("added")
+                    # else:
+                    #     print("not added")
+    return randomGraph
+                    
+"""
+    returns the optimal path from a source node to it destination
+"""
 
 def astar(gridGraph, src, dest):
-    approxDist = calcHeuristic(gridGraph, src)
-    actualDistances = {}
-    astar = {}
-    gPlusH = {}
-    finalized = []
+    distances = {}
+    distances[src] = 0
+    visted = set()
+    path = []
 
     curr = src
-    actualDistances[curr] = 0
-    
     while curr != dest or curr != None:
-        finalized.append(curr)
+        #this if statement stopped my infinite loop lol and idk why this works
+        # print(curr.x, curr.y, curr.neighbors)
+        if curr == dest or curr == None: 
+            break
 
+        visted.add(curr)
         for neighbor in curr.neighbors:
-            #update distances
-            if neighbor not in finalized:
-                if approxDist[neighbor] < actualDistances[curr]: 
-                    actualDistances[neighbor] = approxDist[curr] + actualDistances[neighbor]
-                actualDistances[neighbor] = matthattenDistance(curr, neighbor)
-
+            if neighbor not in visted:
+                if neighbor not in distances or distances[neighbor] > distances[curr] + matthattenDistance(neighbor, dest):
+                    distances[neighbor] = distances[curr] + matthattenDistance(neighbor, dest)
+        
         curr = None
-        for node in approxDist:
-            if node in finalized:
-                continue
-            elif node in actualDistances and node in approxDist:
-                gPlusH[node] = actualDistances[node] + approxDist[node]
+        maxNode = float('inf')
+        for node in distances.keys():
+            if node not in visted or distances[node] < maxNode:
+                curr = node
+                maxNode = distances[curr]
+                print(node, node.neighbors, maxNode)
+        
+        # validPathCheck = 0
+        # if curr != None:
+        #     for neighbor in curr.neighbors:
+        #         if neighbor in visted:
+        #             validPathCheck += 1
+        
+        #     if validPathCheck == 4:
+        #         break
+        # print("im not crazy", validPathCheck)
+        print(curr.val, dest.val, curr.x, curr.y)
 
-        print(actualDistances)
-        print(approxDist)
-        print(gPlusH)
-        curr = min(gPlusH)
+
+        # for a in visted:
+        #     print(a.val)
+
+    actualDist = {} #so apparently python dictionaries are insertion ordered as of 3.6... but im going to return an ordered list anyways
+    for key in distances.keys():
+        path.append(key.val)
+        actualDist[key.val] = distances[key]
     
-    return actualDistances[dest]
+    print(actualDist)    #so i can visually represent the distances
+    return path
 
 mainGraph = GridGraph()
 
@@ -118,4 +167,22 @@ mainGraph.addUndirectedEdge(nodeSix, nodeEight)
 mainGraph.addUndirectedEdge(nodeThree, nodeTwo)
 mainGraph.addUndirectedEdge(nodeFive, nodeSix)
 
-astar(mainGraph, nodeOne, nodeThree)
+rando = createRandomGridGraph(100)
+
+print(astar(mainGraph, nodeOne, nodeThree))
+print(nodeOne.neighbors)
+
+# print(rando.nodes)
+
+# startAndEnd = rando.getFirstAndLast(0, 99)
+
+
+# print(startAndEnd[0].x, startAndEnd[0].y)
+# print(startAndEnd[1].x, startAndEnd[1].y) 
+
+# first ended up being last and last ended up being first
+
+# print(astar(rando, startAndEnd[1], startAndEnd[0]))
+
+for node in rando.nodes:
+    print(node, node.neighbors)

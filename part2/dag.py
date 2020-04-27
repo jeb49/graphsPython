@@ -1,3 +1,4 @@
+import random
 class DirectedGraph:
     def __init__(self):
         self.nodes = set()
@@ -16,6 +17,26 @@ class DirectedGraph:
 
     def getAllNodes(self):
         return self.nodes
+
+"""
+    random graph
+"""
+
+def createRandomGraphDagIter(n):
+    randomGraph = DirectedGraph()
+    added = []
+    for i in range(n):
+        randInt = random.randint(0, n) * 1000
+        randomGraph.addNode(randInt)
+        chance = random.randint(0, 10)
+
+        if chance%2 == 0 and len(added) != 0:
+            indexToAdd = random.randint(0, len(added) - 1)
+            randomGraph.addDirectedEdge(randInt, added[indexToAdd])
+
+        added.append(randInt)
+    
+    return randomGraph
 
 """
     khans algorithim
@@ -76,6 +97,7 @@ def mDFS( g):
     #output all nodes in stack order
     return vistedArr
 
+
     
 
 mainGraph = DirectedGraph()
@@ -103,3 +125,9 @@ print(mainGraph.edges)
 
 print(khans(mainGraph))
 print(mDFS(mainGraph))
+
+rando = createRandomGraphDagIter(100)
+print(rando.nodes) #confirm it works
+
+print(mDFS(rando))
+

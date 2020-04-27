@@ -1,3 +1,4 @@
+import random
 class WeightedNode:
     def __init__(self, value):
         self.val = value
@@ -5,7 +6,6 @@ class WeightedNode:
 
 class WeightedGraph:
     def __init__(self):
-        self.edges = {}
         self.nodes = set()
     
     def addNode(self, nodeToAdd):
@@ -23,6 +23,33 @@ class WeightedGraph:
 
     def getAllNodes(self):
         return self.nodes
+
+def createLinkedList(n):
+    linkedList = WeightedGraph()
+
+    prev = None
+    for i in range(n):
+        curr = WeightedNode(i)
+        linkedList.addNode(curr)
+
+        if prev != None:
+            linkedList.addUndirectedEdge(curr, prev, 1)
+            prev = curr
+
+    return linkedList
+
+def createRandomCompleteGraph(n):
+    randomGraph = WeightedGraph()
+
+    for i in range(n):
+        randomGraph.addNode(WeightedNode(n))
+        
+    for node1 in randomGraph.nodes:
+        for node2 in randomGraph.nodes:
+            if node1 != node2:
+                randWeight = random.randint(1, n)
+                randomGraph.addUndirectedEdge(node1, node2, randWeight)
+    return randomGraph
 
 def dijkstra(graph, start):
     distances = {}
@@ -54,7 +81,7 @@ def dijkstra(graph, start):
             elif distances[node] < distances[curr]:
                 curr = node
 
-    #so i can actually understand           
+    #so i can actually understand the graph          
     newMap = {}
     for el in distances:
         newMap[el.val] = distances[el]
@@ -90,3 +117,9 @@ mainGraph.addUndirectedEdge(nodeOne, nodeThree, 2)
 
 print(dijkstra(mainGraph, nodeOne))
 # print(mainGraph.nodes)
+
+rando = createRandomCompleteGraph(10)
+print(rando.nodes)
+
+link = createLinkedList(20)
+print(link.nodes)
