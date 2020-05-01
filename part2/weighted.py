@@ -12,10 +12,14 @@ class WeightedGraph:
         self.nodes.add(nodeToAdd)
 
     def addUndirectedEdge(self, nodeOne, nodeTwo, weight):
+        if nodeOne not in self.nodes or nodeTwo not in self.nodes:
+            pass
         nodeOne.edges[nodeTwo] = weight
         nodeTwo.edges[nodeOne] = weight
 
     def removeUndirectedEdge(self, nodeOne, nodeTwo):
+        if nodeOne not in self.nodes or nodeTwo not in self.nodes:
+            pass
         if nodeTwo in nodeOne.edges:
             del nodeOne.edges[nodeTwo]
         if nodeOne in nodeTwo.edges:

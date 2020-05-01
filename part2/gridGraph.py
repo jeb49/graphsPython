@@ -114,7 +114,6 @@ def astar(gridGraph, src, dest):
     curr = src
     while curr != dest or curr != None:
         #this if statement stopped my infinite loop lol and idk why this works
-        # print(curr.x, curr.y, curr.neighbors)
         if curr == dest or curr == None: 
             break
 
@@ -130,17 +129,7 @@ def astar(gridGraph, src, dest):
             if node not in visted or distances[node] < maxNode:
                 curr = node
                 maxNode = distances[curr]
-                # print(node, node.neighbors, maxNode)
-        
-        # validPathCheck = 0
-        # if curr != None:
-        #     for neighbor in curr.neighbors:
-        #         if neighbor in visted:
-        #             validPathCheck += 1
-        
-        #     if validPathCheck == 4:
-        #         break
-        # print("im not crazy", validPathCheck)
+
         print(curr.val, dest.val, curr.x, curr.y)
 
 
@@ -197,8 +186,4 @@ print(startAndEnd[0].x, startAndEnd[0].y)
 print(startAndEnd[1].x, startAndEnd[1].y) 
 
 # first ended up being last and last ended up being first
-
 print(astar(rando, startAndEnd[1], startAndEnd[0]))
-
-# for node in rando.nodes:
-#     print(node, node.neighbors)

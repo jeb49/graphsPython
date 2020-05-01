@@ -6,14 +6,20 @@ class Graph:
     
     def addNode(self, nodeToAdd):
         #node can theoretically be anything, thats why i dont check if its a node
+        if nodeToAdd in self.nodes:
+            pass
         self.nodes.add(nodeToAdd)
         self.edges[nodeToAdd] = set()
 
     def addUndirectedEdge(self, nodeOne, nodeTwo):
+        if nodeOne not in self.nodes or nodeTwo not in self.nodes:
+            pass
         self.edges[nodeOne].add(nodeTwo)
         self.edges[nodeTwo].add(nodeOne)
 
     def removeUndirectedEdge(self, nodeOne, nodeTwo):
+        if nodeOne not in self.nodes or nodeTwo not in self.nodes:
+            pass
         if nodeTwo in self.edges[nodeOne]:
             self.edges[nodeOne].remove(nodeTwo)
         if nodeOne in self.edges[nodeTwo]:
@@ -67,19 +73,19 @@ class Traversal:
 
     def dfsIter(self, start, end, graph):
         s = []
-        visitedArr = []
-        visitedArr.append(start)
+        visitedArr = set()
+        visitedArr.add(start)
         for vertex in graph.edges[start]:
             print(graph.edges[start])
             if vertex not in visitedArr:
-                visitedArr.append(vertex)
+                visitedArr.add(vertex)
                 s.append(vertex)
 
                 while len(s) != 0:
                     curr = s.pop()
                     for vert in graph.edges[curr]:
                         if vert not in visitedArr:
-                            visitedArr.append(vert)
+                            visitedArr.add(vert)
                             s.append(vert)
 
         return visitedArr

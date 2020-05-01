@@ -9,9 +9,13 @@ class DirectedGraph:
         self.edges[nodeToAdd] = set()
 
     def addDirectedEdge(self, nodeOne, nodeTwo):
+        if nodeOne not in self.nodes or nodeTwo not in self.nodes:
+            pass
         self.edges[nodeOne].add(nodeTwo)
 
     def removeDirectedEdge(self, nodeOne, nodeTwo):
+        if nodeOne not in self.nodes or nodeTwo not in self.nodes:
+            pass
         if nodeTwo in self.edges[nodeOne]:
             self.edges[nodeOne].remove(nodeTwo)
 
